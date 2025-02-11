@@ -1,0 +1,75 @@
+// android/build.gradle
+
+def DEFAULT_COMPILE_SDK_VERSION = 33
+def DEFAULT_BUILD_TOOLS_VERSION = '33.0.0'
+def DEFAULT_MIN_SDK_VERSION = 21
+def DEFAULT_TARGET_SDK_VERSION = 33
+
+def safeExtGet(prop, fallback) {
+    rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
+}
+
+buildscript {
+    ext {
+        kotlinVersion = '1.8.0'
+    }
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Plugin do Kotlin
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+
+        // Versão recente do plugin Android Gradle (compatível com Gradle 7.x+)
+        classpath 'com.android.tools.build:gradle:7.4.2'
+    }
+}
+
+// Remova ou comente "apply plugin: 'maven'" pois está obsoleto
+// apply plugin: 'maven'
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion safeExtGet('compileSdkVersion', DEFAULT_COMPILE_SDK_VERSION)
+    buildToolsVersion safeExtGet('buildToolsVersion', DEFAULT_BUILD_TOOLS_VERSION)
+
+    defaultConfig {
+        minSdkVersion safeExtGet('minSdkVersion', DEFAULT_MIN_SDK_VERSION)
+        targetSdkVersion safeExtGet('targetSdkVersion', DEFAULT_TARGET_SDK_VERSION)
+        versionCode 1
+        versionName "1.0"
+    }
+
+    // Caso use Gradle 7.0 ou superior, lintOptions foi substituído por:
+    // lint {
+    //    abortOnError = false
+    // }
+    // Mas se funcionar assim, pode manter:
+    lintOptions {
+        abortOnError false
+    }
+}
+
+repositories {
+    // Pacotes locais, caso necessário
+    mavenLocal()
+
+    // Diretórios padrão do React Native
+    maven {
+        url("$rootDir/../node_modules/react-native/android")
+    }
+    maven {
+        url("$rootDir/../node_modules/jsc-android/dist")
+    }
+
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    // Dependência do React Native (buscada em node_modules)
+    compileOnly 'com.facebook.react:react-native:+'
+}
