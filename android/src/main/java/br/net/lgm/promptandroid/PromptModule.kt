@@ -6,7 +6,7 @@ import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import com.facebook.react.bridge.*
 
-class PromptModule(reactContext: ReactApplicationContext) :
+class PromptModule(private val reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
     override fun getName(): String {
@@ -15,7 +15,7 @@ class PromptModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun prompt(title: String, message: String?, placeholder: String?, promise: Promise) {
-        val activity: Activity? = currentActivity
+        val activity: Activity? = reactContext.currentActivity
         if (activity == null) {
             promise.reject("ACTIVITY_NOT_FOUND", "Activity não encontrada")
             return

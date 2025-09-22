@@ -1,7 +1,7 @@
 {
 	"name": "react-native-prompt-android2",
 	"title": "React Native Prompt Android",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"description": "Uma biblioteca para exibir um prompt nativo no Android (semelhante ao Alert.prompt do React Native) para uso em React Native.",
 	"main": "index.js",
 	"files": [
